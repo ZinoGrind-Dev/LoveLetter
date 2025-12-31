@@ -118,14 +118,15 @@
               </clipPath>
             </defs>
 
-            <image
-              id="heartImage"
-              xlink:href="Src/1.jpg"
-              width="200"
-              height="180"
-              clip-path="url(#heartClip)"
-              preserveAspectRatio="xMidYMid slice"
-            />
+<image
+  id="heartImage"
+  href="Src/1.jpg"
+  width="200"
+  height="180"
+  clip-path="url(#heartClip)"
+/>
+
+
           </svg>
 
           <a href="Second.html" class="button">Surat</a>
@@ -160,11 +161,8 @@
 
       setTimeout(() => {
         index = (index + 1) % images.length;
-        heartImage.setAttributeNS(
-          "http://www.w3.org/1999/xlink",
-          "xlink:href",
-          images[index]
-        );
+    heartImage.setAttribute("href", images[index]);
+
         heartImage.style.opacity = 1;
       }, 800);
     }, 3000);
@@ -273,3 +271,4 @@
   </script>
 </body>
 </html>
+

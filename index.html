@@ -100,28 +100,34 @@ body {
       <div class="card">
 
         <!-- SVG HEART IMAGE -->
-        <svg class="love-svg" viewBox="0 0 200 180">
-          <defs>
-            <clipPath id="heartClip">
-              <path d="
-                M100 20
-                C100 0 180 0 180 60
-                C180 120 100 160 100 175
-                C100 160 20 120 20 60
-                C20 0 100 0 100 20 Z
-              "/>
-            </clipPath>
-          </defs>
+<svg
+  class="love-svg"
+  viewBox="0 0 200 180"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+  <defs>
+    <clipPath id="heartClip" clipPathUnits="userSpaceOnUse">
+      <path d="
+        M100 20
+        C100 0 180 0 180 60
+        C180 120 100 160 100 175
+        C100 160 20 120 20 60
+        C20 0 100 0 100 20 Z
+      "/>
+    </clipPath>
+  </defs>
 
-          <image
-            id="heartImage"
-            href="Src/1.jpg"
-            width="200"
-            height="180"
-            clip-path="url(#heartClip)"
-            preserveAspectRatio="xMidYMid slice"
-          />
-        </svg>
+  <image
+    id="heartImage"
+    xlink:href="./src/my-girlfriend/1.jpg"
+    width="200"
+    height="180"
+    clip-path="url(#heartClip)"
+    preserveAspectRatio="xMidYMid slice"
+  />
+</svg>
+
 
         <a href="Second.html" class="button">Surat</a>
       </div>
@@ -264,3 +270,4 @@ animate();
 </script>
 </body>
 </html>
+

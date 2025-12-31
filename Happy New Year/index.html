@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>For My Favorite Person</title>
+
+<style>
+body {
+  margin: 0;
+  background: black;
+  overflow: hidden;
+}
+
+.home {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+/* Canvas fireworks */
+#fireworksCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Text */
+.text {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  font-family: Cambria, Georgia, serif;
+}
+
+.title {
+  color: rgb(245, 105, 224);
+}
+
+.title span {
+  display: block;
+}
+
+/* Card */
+.hero {
+  margin-top: 30px;
+  display: grid;
+  place-items: center;
+}
+
+.card {
+  display: grid;
+  gap: 15px;
+  justify-items: center;
+}
+
+/* LOVE SVG */
+.love-svg {
+  width: 200px;
+  height: 180px;
+  filter: drop-shadow(0 0 25px rgb(190, 13, 111));
+  transform: scale(1.15);
+}
+
+/* Fade animation */
+#heartImage {
+  transition: opacity 0.8s ease-in-out;
+}
+
+/* Button */
+.button {
+  padding: 8px 24px;
+  color: black;
+  background: rgb(81, 26, 76);
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.button:hover {
+  background: white;
+}
+</style>
+</head>
+
+<body>
+<div class="home">
+
+  <div class="text">
+    <h1 class="title">
+      Happy New Year
+      <span>My Love</span>
+    </h1>
+
+    <div class="hero">
+      <div class="card">
+
+        <!-- SVG HEART IMAGE -->
+        <svg class="love-svg" viewBox="0 0 200 180">
+          <defs>
+            <clipPath id="heartClip">
+              <path d="
+                M100 20
+                C100 0 180 0 180 60
+                C180 120 100 160 100 175
+                C100 160 20 120 20 60
+                C20 0 100 0 100 20 Z
+              "/>
+            </clipPath>
+          </defs>
+
+          <image
+            id="heartImage"
+            href="src/My Girlfriend/1.jpg"
+            width="200"
+            height="180"
+            clip-path="url(#heartClip)"
+            preserveAspectRatio="xMidYMid slice"
+          />
+        </svg>
+
+        <a href="Second.html" class="button">Surat</a>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="fireworksCanvas"></canvas>
+</div>
+
+<script>
+/* ================= IMAGE SLIDESHOW ================= */
+
+const images = [
+  "src/My Girlfriend/1.jpg",
+  "src/My Girlfriend/2.jpg",
+  "src/My Girlfriend/3.jpg",
+  "src/My Girlfriend/4.jpg",
+  "src/My Girlfriend/5.jpg",
+  "src/My Girlfriend/6.jpg",
+  "src/My Girlfriend/7.jpg",
+  "src/My Girlfriend/8.jpg",
+  "src/My Girlfriend/9.jpg"
+];
+
+let index = 0;
+const heartImage = document.getElementById("heartImage");
+
+setInterval(() => {
+  heartImage.style.opacity = 0;
+
+  setTimeout(() => {
+    index = (index + 1) % images.length;
+    heartImage.setAttribute("href", images[index]);
+    heartImage.style.opacity = 1;
+  }, 800);
+}, 3000);
+
+/* ================= FIREWORKS ================= */
+
+const canvas = document.getElementById("fireworksCanvas");
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+class Firework {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = canvas.height;
+    this.sx = Math.random() * 3 - 1.5;
+    this.sy = Math.random() * -4 - 6;
+    this.shouldExplode = false;
+    this.explodeHeight = Math.random() * canvas.height * 0.6;
+
+    const c = Math.floor(Math.random() * 0xffffff);
+    this.r = c >> 16;
+    this.g = (c >> 8) & 255;
+    this.b = c & 255;
+  }
+
+  update() {
+    this.sy += 0.03;
+    this.x += this.sx;
+    this.y += this.sy;
+    if (this.y <= this.explodeHeight) this.shouldExplode = true;
+  }
+
+  draw() {
+    ctx.fillStyle = `rgb(${this.r},${this.g},${this.b})`;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+class Particle {
+  constructor(x, y, r, g, b) {
+    this.x = x;
+    this.y = y;
+    this.sx = Math.random() * 4 - 2;
+    this.sy = Math.random() * 4 - 2;
+    this.life = 80;
+    this.r = r;
+    this.g = g;
+    this.b = b;
+  }
+
+  update() {
+    this.sy += 0.05;
+    this.x += this.sx;
+    this.y += this.sy;
+    this.life--;
+  }
+
+  draw() {
+    ctx.fillStyle = `rgba(${this.r},${this.g},${this.b},${this.life / 80})`;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+const fireworks = [];
+const particles = [];
+
+function animate() {
+  ctx.fillStyle = "rgba(0,0,0,0.25)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  if (Math.random() < 0.04) fireworks.push(new Firework());
+
+  for (let i = fireworks.length - 1; i >= 0; i--) {
+    const f = fireworks[i];
+    f.update();
+    f.draw();
+
+    if (f.shouldExplode) {
+      for (let j = 0; j < 60; j++) {
+        particles.push(new Particle(f.x, f.y, f.r, f.g, f.b));
+      }
+      fireworks.splice(i, 1);
+    }
+  }
+
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.update();
+    p.draw();
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+</script>
+</body>
+</html>
